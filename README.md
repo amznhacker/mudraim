@@ -1,59 +1,91 @@
-🔹 Basic Gestures
+# 🎯 Mudra - Gesture Control System
 
-Hand Position
+Complete mouse and keyboard control using hand gestures.
 
-Default / neutral state.
+## 🚀 Quick Start
 
-Acts like moving the cursor or your “starting point.”
+**One command to run everything:**
 
-Tap
+```bash
+python3 mudra.py
+```
 
-Quick pinch motion.
+That's it! The system will:
+- Auto-install dependencies
+- Set up permissions
+- Start gesture control
+- Show you how to use it
 
-Equivalent to a mouse click or key press.
+## 📋 Basic Usage
 
-Pinch & Hold
+### Mouse Mode (Default)
+- `tap` - Left click
+- `rtap` - Right click  
+- `move <x> <y>` - Move cursor
+- `scroll up/down` - Scroll page
+- `twist` - Switch to typing mode
 
-Pinch and keep holding.
+### Typing Mode
+- `tap <0-8>` - Type character at position
+- `rtap` - Backspace
+- `twist` - Switch layers (Letters → Numbers → Symbols)
+- `dtwist` - Enter key
+- `mouse` - Back to mouse mode
 
-Equivalent to click and hold, or can be mapped to Shift/Alt/Ctrl modifier keys.
+### Training & Help
+- `train` - Quick typing trainer
+- `test` - Speed test
+- `layout` - Show character positions
+- `help` - Show all commands
 
-🔹 Advanced Gestures
+## 🔹 Gesture Mapping
 
-Reverse Tap
+**Letters Layer (0):**
+```
+0:a  1:b  2:c
+3:d  4:e  5:f  
+6:g  7:h  8:i
+```
 
-Quick outward motion (reverse pinch).
+**Numbers Layer (1):**
+```
+0:1  1:2  2:3
+3:4  4:5  5:6
+6:7  7:8  8:9
+```
 
-Equivalent to right-click or Backspace/Delete in typing context.
+**Symbols Layer (2):**
+```
+0:!  1:@  2:#
+3:$  4:%  5:^
+6:&  7:*  8:(
+```
 
-Reverse Pinch & Slide
+## 🎯 Example Session
 
-Reverse pinch and drag in a direction.
+```bash
+$ python3 mudra.py
+🎯 MUDRA - Gesture Control System
+✓ Mudra system ready!
 
-Equivalent to scrolling or arrow keys navigation.
+[MOUSE]> move 500 300     # Move cursor
+[MOUSE]> tap              # Click
+[MOUSE]> twist            # Enter typing mode
+[TYPING]> tap 7           # Type 'h'
+[TYPING]> tap 4           # Type 'e'  
+[TYPING]> tap 5           # Type 'l'
+[TYPING]> tap 5           # Type 'l'
+[TYPING]> tap 8           # Type 'o'
+[TYPING]> dtwist          # Press Enter
+```
 
-Twist
+## 🔧 Advanced Features
 
-Rotating motion of fingers while pinched.
+For advanced users, individual components are available:
+- `mudra_trainer.py` - Full training system
+- `speed_test.py` - Comprehensive speed tests
+- `mudra_bluetooth.py` - Bluetooth Mudra band connection
 
-Equivalent to switching layers/modes (letters → numbers → symbols).
+---
 
-Double Twist
-
-Two twists in quick succession.
-
-Equivalent to Enter or Tab depending on context.
-
-👉 In short:
-
-Tap = Type
-
-Pinch & Hold = Modifier
-
-Reverse Tap = Backspace/Delete
-
-Reverse Pinch & Slide = Arrow keys / scroll
-
-Twist = Layer switch
-
-Double Twist = Enter/Tab
+**Ready to control your computer with gestures? Run `python3 mudra.py` and start!
