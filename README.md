@@ -1,102 +1,41 @@
-# 🎯 Mudra - Gesture Control System
+# 🔍 Mudra Debug Mode
 
-Complete mouse and keyboard control using hand gestures.
+We're debugging your Mudra band to understand what gestures send to Ubuntu.
 
-## 🚀 Quick Start
-
-**One command to run everything:**
+## 🚀 Run Debug Tool
 
 ```bash
-python3 mudra.py
+python3 debug_mudra.py
 ```
 
-That's it! The system will:
-- Auto-install dependencies
-- Set up permissions
-- Start gesture control
-- Show you how to use it
+## 📋 Test Each Gesture
 
-## 📋 Basic Usage
+Connect your Mudra band and perform these actions **one at a time**:
 
-### Mouse Mode (Default)
-- `tap` or `pinch` - Left click
-- `rtap` - Right click  
-- `move <x> <y>` - Move cursor
-- `scroll up/down` - Scroll page
-- `twist` - Switch to typing mode
-- `dtwist` - Middle click
+1. **Move hand** - cursor movement
+2. **Pinch** - left click  
+3. **Reverse tap** - right click
+4. **Scroll** - up/down scroll
+5. **Single twist** - ???
+6. **Double twist** - ???
+7. **Any other gestures**
 
-### Typing Mode
-- `tap <0-8>` - Type character at position
-- `rtap` - Backspace
-- `twist` - Switch back to mouse mode
-- `dtwist` - Switch layers (Letters → Numbers → Symbols)
-- `mouse` - Back to mouse mode
+## 📊 What We're Capturing
 
-### Training & Help
-- `train` - Quick typing trainer
-- `test` - Speed test
-- `layout` - Show character positions
-- `help` - Show all commands
+- Mouse movements, clicks, scrolls
+- Keyboard key presses/releases  
+- Timestamps for everything
+- Complete event log saved to file
 
-## 🔹 Gesture Mapping
+## 🎯 Next Steps
 
-**Letters Layer (0):**
-```
-0:a  1:b  2:c
-3:d  4:e  5:f  
-6:g  7:h  8:i
-```
+After testing, tell me:
+- What happens when you twist?
+- What shows up in the debug log?
+- Any special key combinations?
 
-**Numbers Layer (1):**
-```
-0:1  1:2  2:3
-3:4  4:5  5:6
-6:7  7:8  8:9
-```
-
-**Symbols Layer (2):**
-```
-0:!  1:@  2:#
-3:$  4:%  5:^
-6:&  7:*  8:(
-```
-
-## 🎯 Example Session
-
-```bash
-$ python3 mudra.py
-🎯 MUDRA - Gesture Control System
-✓ Mudra system ready!
-
-[MOUSE]> move 500 300     # Move cursor
-[MOUSE]> tap              # Click
-[MOUSE]> twist            # Enter typing mode
-[TYPING]> tap 7           # Type 'h'
-[TYPING]> tap 4           # Type 'e'  
-[TYPING]> tap 5           # Type 'l'
-[TYPING]> tap 5           # Type 'l'
-[TYPING]> tap 8           # Type 'o'
-[TYPING]> dtwist          # Switch to Numbers layer
-```
-
-## 🖥️ GUI Interface
-
-For visual testing and debugging:
-
-```bash
-python3 mudra_gui.py
-```
-
-Features:
-- Visual character layout with clickable buttons
-- Real-time mode and layer display
-- Mouse position controls
-- Activity log for debugging
-- One-click testing of all functions
+Then we'll build the perfect keyboard system for your Mudra band!
 
 ---
 
-**Ready to control your computer with gestures?**
-- Command line: `python3 mudra.py`
-- Visual interface: `python3 mudra_gui.py`
+**Press ESC to stop debugging**
