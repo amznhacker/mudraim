@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """
-Mudra Complete System - Mouse + Fast Gesture Typing
+Mudra Gesture Interpreter - Two-stroke keyboard system
+Based on the complete specification for fast gesture typing
 """
 
 import subprocess
 import sys
 import time
-from pynput import keyboard
+import json
+from datetime import datetime
+from pynput import keyboard, mouse
 from pynput.keyboard import Key, Listener
 
 # Install pynput if needed
@@ -14,232 +17,270 @@ try:
     import pynput
 except ImportError:
     subprocess.check_call([sys.executable, "-m", "pip", "install", "pynput"])
-    from pynput import keyboard
+    from pynput import keyboard, mouse
     from pynput.keyboard import Key, Listener
 
-class MudraSystem:
+class MudraInterpreter:
     def __init__(self):
         self.kb = keyboard.Controller()
-        self.typing_mode = False
+        self.mouse_ctrl = mouse.Controller()
         
-        # Chord-based typing (inspired by stenography)
-        # Maps gesture combinations to letters
-        self.chords = {
-            # Single gestures - most common letters (80% of text)
-            ('right',): 'e',        # 12.7% frequency
-            ('left',): 't',         # 9.1% frequency  
-            ('up',): 'a',           # 8.2% frequency
-            ('down',): 'o',         # 7.5% frequency
-            
-            # Two-gesture combinations - common letters
-            ('right', 'up'): 'i',      # 7.0%
-            ('right', 'down'): 'n',    # 6.7%
-            ('left', 'up'): 's',       # 6.3%
-            ('left', 'down'): 'h',     # 6.1%
-            ('up', 'down'): 'r',       # 6.0%
-            ('right', 'left'): 'd',    # 4.3%
-            
-            # Three-gesture combinations
-            ('right', 'up', 'down'): 'l',     # 4.0%
-            ('left', 'up', 'down'): 'c',      # 2.8%
-            ('right', 'left', 'up'): 'u',     # 2.8%
-            ('right', 'left', 'down'): 'm',   # 2.4%
-            
-            # Using twist for space and common letters
-            ('twist',): ' ',           # Space (most important)
-            ('twist', 'right'): 'w',   # 2.4%
-            ('twist', 'left'): 'f',    # 2.2%
-            ('twist', 'up'): 'g',      # 2.0%
-            ('twist', 'down'): 'y',    # 2.0%
-            
-            # Using double twist
-            ('dtwist',): '.',          # Period
-            ('dtwist', 'right'): 'p',  # 1.9%
-            ('dtwist', 'left'): 'b',   # 1.3%
-            ('dtwist', 'up'): 'v',     # 1.0%
-            ('dtwist', 'down'): 'k',   # 0.8%
-            
-            # Complex combinations for remaining letters
-            ('right', 'twist'): 'j',   # 0.15%
-            ('left', 'twist'): 'x',    # 0.15%
-            ('up', 'twist'): 'q',      # 0.10%
-            ('down', 'twist'): 'z',    # 0.07%
-            
-            # Four-gesture combinations for complete alphabet
-            ('right', 'left', 'twist'): 'k',
-            ('up', 'down', 'twist'): 'j',
-            ('right', 'up', 'twist'): 'q',
-            ('left', 'down', 'twist'): 'x',
-            ('right', 'down', 'twist'): 'z',
-            
-            # Numbers using F4 combinations (mouse double-twist)
-            ('right', 'dtwist'): '1',
-            ('left', 'dtwist'): '2', 
-            ('up', 'dtwist'): '3',
-            ('down', 'dtwist'): '4',
-            ('right', 'up', 'dtwist'): '5',
-            ('right', 'down', 'dtwist'): '6',
-            ('left', 'up', 'dtwist'): '7',
-            ('left', 'down', 'dtwist'): '8',
-            ('up', 'down', 'dtwist'): '9',
-            ('right', 'left', 'dtwist'): '0',
-            
-            # Special characters
-            ('enter',): '\n',          # Enter/newline
-            ('twist', 'dtwist'): ',',  # Comma
-            ('right', 'left', 'up', 'down'): '!',  # Exclamation
+        # State
+        self.mode = "TYPE"  # TYPE or POINTER
+        self.buffer = []
+        self.last_gesture_time = 0
+        self.commit_timeout = 0.26  # 260ms
+        self.hold_threshold = 0.7   # 700ms
+        self.mode_toggle_hold = 0.8 # 800ms
+        
+        # Gesture mappings (F13-F19 from Mudra)
+        self.gesture_keys = {
+            Key.f13: 'R',  # Pinch + Right
+            Key.f14: 'L',  # Pinch + Left  
+            Key.f15: 'U',  # Pinch + Up
+            Key.f16: 'D',  # Pinch + Down
+            Key.f17: 'T',  # Double-Tap
+            Key.f18: 'W',  # Twist
+            Key.f19: 'DW'  # Double-Twist
         }
         
-        self.current_chord = []
-        self.chord_timeout = 0.8  # 800ms to complete chord
-        self.last_gesture_time = 0
+        # Single stroke mappings (top 5 letters = 40% of text)
+        self.singles = {
+            'R': 'e',  # 12.7%
+            'U': 't',  # 9.1%
+            'D': 'a',  # 8.2%
+            'L': 'o',  # 7.5%
+            'T': 'n'   # 6.7%
+        }
         
-    def process_gesture(self, gesture):
-        """Process gesture and build chord"""
-        current_time = time.time()
+        # Two-stroke 5x5 grid (remaining alphabet + punctuation)
+        self.grid = {
+            'RR': 's', 'RL': 'h', 'RU': 'r', 'RD': 'd', 'RT': 'l',
+            'LR': 'c', 'LL': 'u', 'LU': 'm', 'LD': 'w', 'LT': 'f',
+            'UR': 'g', 'UL': 'y', 'UU': 'p', 'UD': 'b', 'UT': 'v',
+            'DR': 'k', 'DL': 'j', 'DU': 'x', 'DD': 'q', 'DT': 'z',
+            'TR': ',', 'TL': '.', 'TU': "'", 'TD': '?', 'TT': '-'
+        }
         
-        # Reset chord if timeout
-        if current_time - self.last_gesture_time > self.chord_timeout:
-            self.current_chord = []
+        # Numbers & symbols layer
+        self.numsym = {
+            'RR': '1', 'RL': '2', 'RU': '3', 'RD': '4', 'RT': '5',
+            'LR': '6', 'LL': '7', 'LU': '8', 'LD': '9', 'LT': '0',
+            'UR': '!', 'UL': '@', 'UU': '#', 'UD': '$', 'UT': '%',
+            'DR': '&', 'DL': '*', 'DU': '(', 'DD': ')', 'DT': '_',
+            'TR': ':', 'TL': ';', 'TU': '/', 'TD': '\\', 'TT': '='
+        }
         
-        self.current_chord.append(gesture)
-        self.last_gesture_time = current_time
+        # Modifiers (sticky)
+        self.modifiers = {
+            'shift': False,
+            'ctrl': False,
+            'alt': False,
+            'meta': False
+        }
         
-        # Try to match chord
-        chord_tuple = tuple(sorted(self.current_chord))
+        self.numsym_layer = False
         
-        if chord_tuple in self.chords:
-            char = self.chords[chord_tuple]
-            self.type_character(char)
-            self.current_chord = []
-            return True
+    def log(self, message):
+        """Debug logging"""
+        timestamp = datetime.now().strftime("%H:%M:%S.%f")[:-3]
+        print(f"[{timestamp}] {message}")
+    
+    def commit_buffer(self):
+        """Process current buffer and output character"""
+        if not self.buffer:
+            return
         
-        # Reset if chord too long
-        if len(self.current_chord) > 3:
-            print(f"Unknown: {self.current_chord}")
-            self.current_chord = []
+        if self.mode == "POINTER":
+            self.handle_pointer_gesture()
+            self.buffer = []
+            return
         
-        return False
+        # TYPE mode
+        if len(self.buffer) == 1:
+            # Single stroke
+            gesture = self.buffer[0]
+            if gesture in self.singles:
+                char = self.singles[gesture]
+                self.type_character(char)
+        
+        elif len(self.buffer) == 2:
+            # Two stroke
+            combo = ''.join(self.buffer)
+            
+            if self.numsym_layer and combo in self.numsym:
+                char = self.numsym[combo]
+                self.type_character(char)
+            elif combo in self.grid:
+                char = self.grid[combo]
+                self.type_character(char)
+            else:
+                self.log(f"Unknown combo: {combo}")
+        
+        self.buffer = []
     
     def type_character(self, char):
-        """Type character"""
-        if char == '\n':
-            self.kb.press(Key.enter)
-            self.kb.release(Key.enter)
-            print("↵")
-        else:
-            self.kb.press(char)
-            self.kb.release(char)
-            print(f"→ {char}")
+        """Type character with modifiers"""
+        # Apply sticky modifiers
+        if self.modifiers['shift']:
+            self.kb.press(Key.shift)
+        if self.modifiers['ctrl']:
+            self.kb.press(Key.ctrl)
+        if self.modifiers['alt']:
+            self.kb.press(Key.alt)
+        if self.modifiers['meta']:
+            self.kb.press(Key.cmd)
+        
+        # Type character
+        self.kb.press(char)
+        self.kb.release(char)
+        
+        # Release modifiers
+        if self.modifiers['shift']:
+            self.kb.release(Key.shift)
+        if self.modifiers['ctrl']:
+            self.kb.release(Key.ctrl)
+        if self.modifiers['alt']:
+            self.kb.release(Key.alt)
+        if self.modifiers['meta']:
+            self.kb.release(Key.cmd)
+        
+        # Clear sticky modifiers (except for shortcuts)
+        self.modifiers['shift'] = False
+        
+        self.log(f"Typed: {char}")
+    
+    def handle_special_gesture(self, gesture, is_hold=False):
+        """Handle special gestures"""
+        if gesture == 'W':  # Twist
+            if is_hold:
+                # Delete word
+                self.kb.press(Key.ctrl)
+                self.kb.press(Key.backspace)
+                self.kb.release(Key.backspace)
+                self.kb.release(Key.ctrl)
+                self.log("Delete word")
+            else:
+                # Backspace
+                self.kb.press(Key.backspace)
+                self.kb.release(Key.backspace)
+                self.log("Backspace")
+        
+        elif gesture == 'DW':  # Double-Twist
+            if is_hold:
+                # Toggle mode
+                self.mode = "POINTER" if self.mode == "TYPE" else "TYPE"
+                self.log(f"Mode: {self.mode}")
+            else:
+                # Space
+                self.kb.press(Key.space)
+                self.kb.release(Key.space)
+                self.log("Space")
+    
+    def handle_pointer_gesture(self):
+        """Handle gestures in pointer mode"""
+        if len(self.buffer) == 1:
+            gesture = self.buffer[0]
+            if gesture == 'R':
+                self.mouse_ctrl.move(10, 0)
+            elif gesture == 'L':
+                self.mouse_ctrl.move(-10, 0)
+            elif gesture == 'U':
+                self.mouse_ctrl.move(0, -10)
+            elif gesture == 'D':
+                self.mouse_ctrl.move(0, 10)
+            elif gesture == 'T':
+                self.mouse_ctrl.click(mouse.Button.left)
+                self.log("Left click")
+        
+        elif len(self.buffer) == 2:
+            combo = ''.join(self.buffer)
+            if combo == 'RR':
+                self.mouse_ctrl.click(mouse.Button.left, 2)  # Double click
+                self.log("Double click")
+            elif combo == 'LL':
+                self.mouse_ctrl.click(mouse.Button.right)
+                self.log("Right click")
     
     def on_key_press(self, key):
-        """Handle all input"""
-        # F1 = Toggle typing mode (from mouse mode twist)
-        if key == Key.f1:
-            self.typing_mode = not self.typing_mode
-            mode = "TYPING" if self.typing_mode else "MOUSE"
-            print(f"\n🔄 {mode} MODE")
-            if self.typing_mode:
-                self.show_help()
+        """Handle gesture input"""
+        if key not in self.gesture_keys:
             return
         
-        # F4 = Mouse mode double twist (could be used for special functions)
-        if key == Key.f4 and not self.typing_mode:
-            print("\n🔄 Double twist in mouse mode")
-            # Could add special mouse functions here (e.g., middle click, etc.)
+        gesture = self.gesture_keys[key]
+        current_time = time.time()
+        
+        # Handle special gestures immediately
+        if gesture in ['W', 'DW']:
+            self.commit_buffer()  # Commit any pending buffer first
+            self.handle_special_gesture(gesture)
             return
         
-        # Only process gestures in typing mode
-        if not self.typing_mode:
-            return
+        # Add to buffer
+        self.buffer.append(gesture)
+        self.last_gesture_time = current_time
         
-        # Map keyboard mode gestures
-        gesture = None
-        if key == Key.right:
-            gesture = 'right'
-        elif key == Key.left:
-            gesture = 'left'
-        elif key == Key.up:
-            gesture = 'up'
-        elif key == Key.down:
-            gesture = 'down'
-        elif key == Key.enter:
-            gesture = 'enter'
-        elif key == Key.f2:
-            gesture = 'twist'
-        elif key == Key.f3:
-            gesture = 'dtwist'
-        elif key == Key.f4:  # Mouse mode double-twist for numbers
-            gesture = 'dtwist'
-        elif key == Key.esc:
-            self.typing_mode = False
-            print("\n📱 MOUSE MODE")
-            return
+        self.log(f"Buffer: {self.buffer}")
         
-        if gesture:
-            self.process_gesture(gesture)
+        # Auto-commit if buffer full
+        if len(self.buffer) >= 2:
+            self.commit_buffer()
     
-    def show_help(self):
-        """Show chord reference"""
-        print("=== GESTURE CHORDS ===")
-        print("Letters: Right→e  Left→t  Up→a  Down→o")
-        print("Combos: Right+Up→i  Right+Down→n  Left+Up→s")
-        print("Numbers: Use double-twist + directions (1-0)")
-        print("Space: Twist    Period: Double-twist")
-        print("ESC = Mouse mode")
+    def check_timeout(self):
+        """Check if buffer should be committed due to timeout"""
+        if self.buffer and time.time() - self.last_gesture_time > self.commit_timeout:
+            self.commit_buffer()
     
-    def train(self):
-        """Training mode"""
-        print("\n🎯 TRAINING MODE")
-        print("Practice common words:")
+    def show_status(self):
+        """Show current status"""
+        print(f"\n🎯 MUDRA INTERPRETER")
+        print(f"Mode: {self.mode}")
+        print(f"NumSym Layer: {'ON' if self.numsym_layer else 'OFF'}")
+        print(f"Buffer: {self.buffer}")
         
-        words = ['to', 'the', 'and', 'it', 'at', 'he']
-        
-        for word in words:
-            print(f"\nWord: '{word}'")
-            for char in word:
-                for chord, letter in self.chords.items():
-                    if letter == char:
-                        print(f"  '{char}' → {'+'.join(chord)}")
-                        break
-            input("Practice this word, then press Enter...")
+        if self.mode == "TYPE":
+            print("\nSingle strokes: R→e U→t D→a L→o T→n")
+            print("Two strokes: RL→h RU→r LD→w etc.")
+            print("Special: W→backspace DW→space")
+        else:
+            print("\nPointer: R/L/U/D→move T→click")
     
     def run(self):
-        """Main system"""
-        print("🎯 MUDRA COMPLETE SYSTEM")
-        print("Mouse + Fast Gesture Typing")
-        print("\n=== SETUP INSTRUCTIONS ===")
-        print("1. MOUSE MODE (default Mudra gestures work)")
-        print("   • Twist → F1")
-        print("   • Double-twist → F4")
-        print("2. KEYBOARD MODE (double-press Mudra button):")
-        print("   • Pinch+Right → Right Arrow")
-        print("   • Pinch+Left → Left Arrow")
-        print("   • Pinch+Up → Up Arrow") 
-        print("   • Pinch+Down → Down Arrow")
-        print("   • Double-tap → Enter")
-        print("   • Twist → F2")
-        print("   • Double-twist → F3")
-        print("\n=== USAGE ===")
-        print("• Browse with mouse gestures")
-        print("• F1 (twist) = Enter typing mode")
-        print("• Use gesture combinations to type")
-        print("• F1 again = Back to mouse")
-        print("\nPress 't' for training, or any key to start...")
+        """Main interpreter loop"""
+        print("🎯 MUDRA GESTURE INTERPRETER")
+        print("Two-stroke keyboard system for fast typing!")
+        print("\n=== SETUP REQUIRED ===")
+        print("In Mudra Studio (Keyboard Mode), assign:")
+        print("• Pinch+Right → F13")
+        print("• Pinch+Left → F14") 
+        print("• Pinch+Up → F15")
+        print("• Pinch+Down → F16")
+        print("• Double-Tap → F17")
+        print("• Twist → F18")
+        print("• Double-Twist → F19")
+        print("\n=== READY TO TYPE ===")
+        print("Single gestures: R→e, U→t, D→a, L→o, T→n")
+        print("Two gestures: RL→h, RU→r, LD→w, etc.")
+        print("W→backspace, DW→space")
+        print("\nPress Ctrl+C to stop")
         
-        choice = input().strip().lower()
-        if choice == 't':
-            self.train()
+        # Start timeout checker
+        import threading
+        def timeout_checker():
+            while True:
+                self.check_timeout()
+                time.sleep(0.05)  # Check every 50ms
         
-        print(f"\nCurrent mode: {'TYPING' if self.typing_mode else 'MOUSE'}")
-        print("Press Ctrl+C to exit")
+        timeout_thread = threading.Thread(target=timeout_checker, daemon=True)
+        timeout_thread.start()
         
+        # Start listening
         with Listener(on_press=self.on_key_press) as listener:
             try:
                 listener.join()
             except KeyboardInterrupt:
-                print("\nMudra system stopped")
+                print("\nMudra Interpreter stopped")
 
 if __name__ == "__main__":
-    system = MudraSystem()
-    system.run()
+    interpreter = MudraInterpreter()
+    interpreter.run()

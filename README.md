@@ -57,6 +57,11 @@ python3 mudra.py
 3. **Use gesture chords** → type words
 4. **F1 again** → back to mouse
 
+## 🔧 Files
+
+- `mudra.py` - Main system (run this)
+- `gesture_debug.py` - Debug tool to test your gestures
+
 ---
 
 **Ready to type at superhuman speeds with pure gestures!**
