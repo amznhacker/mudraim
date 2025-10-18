@@ -1,44 +1,54 @@
-# 🔍 Mudra Debug Mode
+# 🎯 Mudra Complete System
 
-We're debugging your Mudra band to understand what gestures send to Ubuntu.
+Your mouse already works! Now let's add keyboard functionality.
 
-## 🚀 Run Debug Tool
+## 🚀 Setup & Run
 
+1. **In your Mudra app**, assign these shortcuts:
+   - Single twist → **F1 key**
+   - Double twist → **F2 key**
+
+2. **Run the keyboard system**:
+```bash
+python3 mudra_keyboard.py
+```
+
+## 📋 How to Use
+
+**Mouse Mode (default):**
+- Your existing gestures work perfectly
+- Pinch = left click, reverse tap = right click, scroll works
+
+**Add Typing:**
+- **F1 (twist)** = Toggle typing mode
+- **F2 (double twist)** = Switch layers (Letters/Numbers/Symbols)
+- **Number keys 0-8** = Type characters
+
+## 🔤 Character Layout
+
+**Letters:** 0:a 1:b 2:c 3:d 4:e 5:f 6:g 7:h 8:i
+**Numbers:** 0:1 1:2 2:3 3:4 4:5 5:6 6:7 7:8 8:9
+**Symbols:** 0:! 1:@ 2:# 3:$ 4:% 5:^ 6:& 7:* 8:(
+
+## 🎯 Workflow
+
+1. Browse normally with mouse gestures
+2. Click text field → twist (F1) to enter typing mode
+3. Type with number keys, twist again (F2) for symbols
+4. Twist (F1) to return to mouse mode
+
+
+
+## 🔍 Debug Mode
+
+To debug gestures:
 ```bash
 python3 debug_mudra.py
 ```
 
-## 📋 Test Each Gesture
+---
 
-Connect your Mudra band and perform these actions **one at a time**:
-
-1. **Move hand** - cursor movement
-2. **Pinch** - left click  
-3. **Reverse tap** - right click
-4. **Scroll** - up/down scroll
-5. **Single twist** - ???
-6. **Double twist** - ???
-7. **Any other gestures**
-
-## 📊 What We're Capturing
-
-- Mouse movements, clicks, scrolls
-- Keyboard key presses/releases  
-- Timestamps for everything
-- Complete event log saved to file
-
-## 🎯 Next Steps
-
-After testing, tell me:
-- What happens when you twist?
-- What shows up in the debug log?
-- Any special key combinations?
-
-
-
-logs 
-Mudra Band Debug Log
-==============================
+## Debug Logs
 [19:07:43.270] KEY_RELEASE: Key.enter
 [19:07:46.237] MOUSE_MOVE: (604, 780)
 [19:07:46.237] MOUSE_MOVE: (600, 773)
