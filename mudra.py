@@ -59,14 +59,35 @@ class MudraSystem:
             ('dtwist', 'up'): 'v',     # 1.0%
             ('dtwist', 'down'): 'k',   # 0.8%
             
-            # Complex combinations for rare letters
+            # Complex combinations for remaining letters
             ('right', 'twist'): 'j',   # 0.15%
             ('left', 'twist'): 'x',    # 0.15%
             ('up', 'twist'): 'q',      # 0.10%
             ('down', 'twist'): 'z',    # 0.07%
             
-            # Special
+            # Four-gesture combinations for complete alphabet
+            ('right', 'left', 'twist'): 'k',
+            ('up', 'down', 'twist'): 'j',
+            ('right', 'up', 'twist'): 'q',
+            ('left', 'down', 'twist'): 'x',
+            ('right', 'down', 'twist'): 'z',
+            
+            # Numbers using F4 combinations (mouse double-twist)
+            ('right', 'dtwist'): '1',
+            ('left', 'dtwist'): '2', 
+            ('up', 'dtwist'): '3',
+            ('down', 'dtwist'): '4',
+            ('right', 'up', 'dtwist'): '5',
+            ('right', 'down', 'dtwist'): '6',
+            ('left', 'up', 'dtwist'): '7',
+            ('left', 'down', 'dtwist'): '8',
+            ('up', 'down', 'dtwist'): '9',
+            ('right', 'left', 'dtwist'): '0',
+            
+            # Special characters
             ('enter',): '\n',          # Enter/newline
+            ('twist', 'dtwist'): ',',  # Comma
+            ('right', 'left', 'up', 'down'): '!',  # Exclamation
         }
         
         self.current_chord = []
@@ -122,6 +143,12 @@ class MudraSystem:
                 self.show_help()
             return
         
+        # F4 = Mouse mode double twist (could be used for special functions)
+        if key == Key.f4 and not self.typing_mode:
+            print("\n🔄 Double twist in mouse mode")
+            # Could add special mouse functions here (e.g., middle click, etc.)
+            return
+        
         # Only process gestures in typing mode
         if not self.typing_mode:
             return
@@ -142,6 +169,8 @@ class MudraSystem:
             gesture = 'twist'
         elif key == Key.f3:
             gesture = 'dtwist'
+        elif key == Key.f4:  # Mouse mode double-twist for numbers
+            gesture = 'dtwist'
         elif key == Key.esc:
             self.typing_mode = False
             print("\n📱 MOUSE MODE")
@@ -153,8 +182,9 @@ class MudraSystem:
     def show_help(self):
         """Show chord reference"""
         print("=== GESTURE CHORDS ===")
-        print("Single: Right→e  Left→t  Up→a  Down→o")
+        print("Letters: Right→e  Left→t  Up→a  Down→o")
         print("Combos: Right+Up→i  Right+Down→n  Left+Up→s")
+        print("Numbers: Use double-twist + directions (1-0)")
         print("Space: Twist    Period: Double-twist")
         print("ESC = Mouse mode")
     
@@ -180,6 +210,8 @@ class MudraSystem:
         print("Mouse + Fast Gesture Typing")
         print("\n=== SETUP INSTRUCTIONS ===")
         print("1. MOUSE MODE (default Mudra gestures work)")
+        print("   • Twist → F1")
+        print("   • Double-twist → F4")
         print("2. KEYBOARD MODE (double-press Mudra button):")
         print("   • Pinch+Right → Right Arrow")
         print("   • Pinch+Left → Left Arrow")
@@ -188,7 +220,6 @@ class MudraSystem:
         print("   • Double-tap → Enter")
         print("   • Twist → F2")
         print("   • Double-twist → F3")
-        print("3. Mouse mode twist → F1")
         print("\n=== USAGE ===")
         print("• Browse with mouse gestures")
         print("• F1 (twist) = Enter typing mode")

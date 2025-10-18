@@ -8,6 +8,7 @@
 
 **Mouse Mode (default):**
 - Twist → **F1**
+- Double-twist → **F4**
 
 **Keyboard Mode (double-press Mudra button):**
 - Pinch+Right → **Right Arrow**
