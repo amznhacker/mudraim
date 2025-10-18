@@ -1674,3 +1674,83 @@ Then we'll build the perfect keyboard system for your Mudra band!
 ---
 
 **Press ESC to stop debugging**
+
+
+python3 mudra_keyboard.py
+🎯 Mudra Keyboard System Started
+Your mouse already works perfectly!
+
+=== SETUP INSTRUCTIONS ===
+In your Mudra app, assign these shortcuts:
+• Single twist → F1 key
+• Double twist → F2 key
+
+=== HOW TO USE ===
+1. Use mouse normally (already working)
+2. F1 (twist) = Toggle typing mode
+3. F2 (double twist) = Switch layers
+4. Number keys 0-8 = Type characters
+
+Press Ctrl+C to stop
+
+Current mode: MOUSE
+
+🔄 Switched to TYPING mode
+Ready to type! Use number keys 0-8:
+
+Letters:
+  0:a 1:b 2:c
+  3:d 4:e 5:f
+  6:g 7:h 8:i
+^[OP^[OQ
+🔄 Switched to Numbers layer
+
+Numbers:
+  0:1 1:2 2:3
+  3:4 4:5 5:6
+  6:7 7:8 8:9
+^[OP
+🔄 Switched to MOUSE modepython3 mudra_keyboard.py
+🎯 Mudra Keyboard System Started
+Your mouse already works perfectly!
+
+=== SETUP INSTRUCTIONS ===
+In your Mudra app, assign these shortcuts:
+• Single twist → F1 key
+• Double twist → F2 key
+
+=== HOW TO USE ===
+1. Use mouse normally (already working)
+2. F1 (twist) = Toggle typing mode
+3. F2 (double twist) = Switch layers
+4. Number keys 0-8 = Type characters
+
+Press Ctrl+C to stop
+
+Current mode: MOUSE
+
+🔄 Switched to TYPING mode
+Ready to type! Use number keys 0-8:
+
+Letters:
+  0:a 1:b 2:c
+  3:d 4:e 5:f
+  6:g 7:h 8:i
+^[OP^[OQ
+🔄 Switched to Numbers layer
+
+Numbers:
+  0:1 1:2 2:3
+  3:4 4:5 5:6
+  6:7 7:8 8:9
+^[OP
+🔄 Switched to MOUSE mode
+Back to mouse mode
+^C
+Mudra Keyboard stopped
+
+Back to mouse mode
+^C
+Mudra Keyboard stopped
+
+
