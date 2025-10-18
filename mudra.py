@@ -90,23 +90,27 @@ class SimpleMudra:
                 self.mouse.click(Button.right)
                 print("Right click")
         
+        elif action == 'pinch':
+            # Pinch = left click (same as tap for consistency)
+            self.mouse.click(Button.left)
+            print("Left click (pinch)")
+        
         elif action == 'twist':
+            # Toggle between mouse and typing mode
+            self.typing_mode = not self.typing_mode
+            mode = "TYPING" if self.typing_mode else "MOUSE"
+            print(f"Switched to {mode} mode")
+        
+        elif action == 'dtwist':
             if self.typing_mode:
+                # Switch layers in typing mode
                 self.layer = (self.layer + 1) % 3
                 layers = ['Letters', 'Numbers', 'Symbols']
                 print(f"Layer: {layers[self.layer]}")
             else:
-                self.typing_mode = True
-                print("TYPING MODE ON")
-        
-        elif action == 'dtwist':
-            if self.typing_mode:
-                self.kb.press(Key.enter)
-                self.kb.release(Key.enter)
-                print("Enter")
-            else:
-                self.typing_mode = True
-                print("TYPING MODE ON")
+                # Middle click in mouse mode
+                self.mouse.click(Button.middle)
+                print("Middle click")
         
         elif action == 'move':
             if len(parts) == 3:
@@ -136,10 +140,11 @@ class SimpleMudra:
     def show_help(self):
         """Show command help"""
         print("\n=== MUDRA COMMANDS ===")
-        print("tap [0-8]     - Click or type character at position")
+        print("tap [0-8]     - Left click or type character at position")
+        print("pinch         - Left click (same as tap)")
         print("rtap          - Right click or backspace")  
-        print("twist         - Switch typing layers or enter typing mode")
-        print("dtwist        - Enter key or enter typing mode")
+        print("twist         - Toggle between mouse/typing mode")
+        print("dtwist        - Switch typing layers or middle click")
         print("move <x> <y>  - Move mouse cursor")
         print("scroll up/down- Scroll page")
         print("mouse         - Switch to mouse mode")

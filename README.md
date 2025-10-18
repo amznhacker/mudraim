@@ -19,17 +19,18 @@ That's it! The system will:
 ## 📋 Basic Usage
 
 ### Mouse Mode (Default)
-- `tap` - Left click
+- `tap` or `pinch` - Left click
 - `rtap` - Right click  
 - `move <x> <y>` - Move cursor
 - `scroll up/down` - Scroll page
 - `twist` - Switch to typing mode
+- `dtwist` - Middle click
 
 ### Typing Mode
 - `tap <0-8>` - Type character at position
 - `rtap` - Backspace
-- `twist` - Switch layers (Letters → Numbers → Symbols)
-- `dtwist` - Enter key
+- `twist` - Switch back to mouse mode
+- `dtwist` - Switch layers (Letters → Numbers → Symbols)
 - `mouse` - Back to mouse mode
 
 ### Training & Help
@@ -76,16 +77,26 @@ $ python3 mudra.py
 [TYPING]> tap 5           # Type 'l'
 [TYPING]> tap 5           # Type 'l'
 [TYPING]> tap 8           # Type 'o'
-[TYPING]> dtwist          # Press Enter
+[TYPING]> dtwist          # Switch to Numbers layer
 ```
 
-## 🔧 Advanced Features
+## 🖥️ GUI Interface
 
-For advanced users, individual components are available:
-- `mudra_trainer.py` - Full training system
-- `speed_test.py` - Comprehensive speed tests
-- `mudra_bluetooth.py` - Bluetooth Mudra band connection
+For visual testing and debugging:
+
+```bash
+python3 mudra_gui.py
+```
+
+Features:
+- Visual character layout with clickable buttons
+- Real-time mode and layer display
+- Mouse position controls
+- Activity log for debugging
+- One-click testing of all functions
 
 ---
 
-**Ready to control your computer with gestures? Run `python3 mudra.py` and start!
+**Ready to control your computer with gestures?**
+- Command line: `python3 mudra.py`
+- Visual interface: `python3 mudra_gui.py`
