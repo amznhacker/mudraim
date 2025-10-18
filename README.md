@@ -1,54 +1,43 @@
 # 🎯 Mudra Complete System
 
-Your mouse already works! Now let's add keyboard functionality.
+**Your mouse works perfectly!** Now add typing with gestures.
 
-## 🚀 Setup & Run
+## 🚀 Quick Start
 
-1. **In your Mudra app**, assign these shortcuts:
-   - Single twist → **F1 key**
-   - Double twist → **F2 key**
+1. **Setup**: Assign twist→F1, double twist→F2 in Mudra app
+2. **Train**: `python3 mudra_trainer.py` - Learn positions
+3. **Type**: `python3 mudra_keyboard.py` - Start typing
 
-2. **Run the keyboard system**:
-```bash
-python3 mudra_keyboard.py
+## 📋 How It Works
+
+**Mouse (default)**: All gestures work normally
+**Typing**: F1 toggles typing mode, number keys 0-8 type characters
+
+## 🔤 Character Positions
+
 ```
-
-## 📋 How to Use
-
-**Mouse Mode (default):**
-- Your existing gestures work perfectly
-- Pinch = left click, reverse tap = right click, scroll works
-
-**Add Typing:**
-- **F1 (twist)** = Toggle typing mode
-- **F2 (double twist)** = Switch layers (Letters/Numbers/Symbols)
-- **Number keys 0-8** = Type characters
-
-## 🔤 Character Layout
-
-**Letters:** 0:a 1:b 2:c 3:d 4:e 5:f 6:g 7:h 8:i
-**Numbers:** 0:1 1:2 2:3 3:4 4:5 5:6 6:7 7:8 8:9
-**Symbols:** 0:! 1:@ 2:# 3:$ 4:% 5:^ 6:& 7:* 8:(
+0:a  1:b  2:c
+3:d  4:e  5:f
+6:g  7:h  8:i
+```
 
 ## 🎯 Workflow
 
-1. Browse normally with mouse gestures
-2. Click text field → twist (F1) to enter typing mode
-3. Type with number keys, twist again (F2) for symbols
-4. Twist (F1) to return to mouse mode
+1. Browse with mouse gestures
+2. Twist (F1) → typing mode
+3. Use 0-8 keys → type letters
+4. Twist (F1) → back to mouse
 
 
 
-## 🔍 Debug Mode
+## 🏋️ Training
 
-To debug gestures:
+Learn the positions:
 ```bash
-python3 debug_mudra.py
+python3 mudra_trainer.py
 ```
 
 ---
-
-## Debug Logs
 [19:07:43.270] KEY_RELEASE: Key.enter
 [19:07:46.237] MOUSE_MOVE: (604, 780)
 [19:07:46.237] MOUSE_MOVE: (600, 773)
