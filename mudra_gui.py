@@ -12,10 +12,15 @@ from mudra import SimpleMudra
 class MudraGUI:
     def __init__(self):
         self.root = tk.Tk()
-        self.root.title("🎯 Mudra Control System")
-        self.root.geometry("800x600")
+        self.root.title("Mudra Control System")
+        self.root.geometry("600x500")
         
-        self.mudra = SimpleMudra()
+        try:
+            self.mudra = SimpleMudra()
+        except Exception as e:
+            print(f"Error initializing Mudra: {e}")
+            self.mudra = None
+        
         self.setup_ui()
         
     def setup_ui(self):
@@ -28,10 +33,10 @@ class MudraGUI:
         status_frame = ttk.LabelFrame(main_frame, text="Status", padding="10")
         status_frame.grid(row=0, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
         
-        self.mode_label = ttk.Label(status_frame, text="Mode: MOUSE", font=("Arial", 14, "bold"))
+        self.mode_label = ttk.Label(status_frame, text="Mode: MOUSE")
         self.mode_label.grid(row=0, column=0, sticky=tk.W)
         
-        self.layer_label = ttk.Label(status_frame, text="Layer: Letters", font=("Arial", 12))
+        self.layer_label = ttk.Label(status_frame, text="Layer: Letters")
         self.layer_label.grid(row=0, column=1, sticky=tk.E)
         
         # Character layout
@@ -50,7 +55,7 @@ class MudraGUI:
         log_frame = ttk.LabelFrame(main_frame, text="Activity Log", padding="10")
         log_frame.grid(row=2, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(10, 0))
         
-        self.log_text = scrolledtext.ScrolledText(log_frame, height=8, width=80)
+        self.log_text = scrolledtext.ScrolledText(log_frame, height=6, width=60)
         self.log_text.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         
         # Configure grid weights
@@ -61,7 +66,7 @@ class MudraGUI:
         main_frame.rowconfigure(1, weight=1)
         main_frame.rowconfigure(2, weight=1)
         
-        self.log("🎯 Mudra GUI started")
+        self.log("Mudra GUI started")
         self.update_status()
     
     def create_character_grid(self, parent):
@@ -73,10 +78,10 @@ class MudraGUI:
             row = i // 3
             col = i % 3
             
-            btn = tk.Button(parent, text="", width=8, height=3, 
+            btn = tk.Button(parent, text="", width=6, height=2, 
                           command=lambda pos=i: self.tap_position(pos),
-                          font=("Arial", 16, "bold"))
-            btn.grid(row=row, column=col, padx=2, pady=2)
+                          font=("Courier", 12))
+            btn.grid(row=row, column=col, padx=1, pady=1)
             self.char_buttons.append(btn)
         
         self.update_character_grid()
@@ -158,6 +163,10 @@ class MudraGUI:
     
     def tap_position(self, pos):
         """Handle character tap"""
+        if not self.mudra:
+            self.log("Error: Mudra not initialized")
+            return
+            
         if self.mudra.typing_mode and pos < len(self.mudra.chars[self.mudra.layer]):
             char = self.mudra.chars[self.mudra.layer][pos]
             self.mudra.handle_input(f"tap {pos}")
