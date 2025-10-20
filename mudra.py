@@ -21,9 +21,9 @@ class DollarRecognizer:
     """Simplified $1 Unistroke Recognizer for letters"""
     
     def __init__(self):
-        self.templates = self.create_letter_templates()
         self.num_points = 32  # Resample to this many points
         self.square_size = 250.0
+        self.templates = self.create_letter_templates()
     
     def create_letter_templates(self):
         """Create templates for common letters"""
