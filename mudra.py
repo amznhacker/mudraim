@@ -58,7 +58,7 @@ class MudraKeyboardTyping:
         # Combo tracking
         self.last_key = None
         self.last_key_time = 0
-        self.combo_timeout = 0.8  # 800ms for combinations
+        self.combo_timeout = 0.5  # 500ms for combinations
     
     def process_key(self, key):
         """Process keyboard gesture"""
@@ -168,23 +168,12 @@ class MudraKeyboardTyping:
         """Start the system"""
         print("🎯 MUDRA KEYBOARD MODE TYPING")
         print("Using your actual keyboard mode gestures!")
-        print("\n=== SETUP INSTRUCTIONS ===")
-        print("1. MOUSE MODE (default Mudra gestures work):")
-        print("   • Twist → F1")
-        print("\n2. KEYBOARD MODE (double-press Mudra button):")
-        print("   • Pinch+Right → Right Arrow")
-        print("   • Pinch+Left → Left Arrow")
-        print("   • Pinch+Up → Up Arrow")
-        print("   • Pinch+Down → Down Arrow")
-        print("   • Double-tap → Enter")
-        print("   • Twist → F2")
-        print("   • Double-twist → F3")
+        print("\n=== SETUP ===")
+        print("Mouse Mode: Twist → F1")
+        print("Keyboard Mode: Twist → F2, Double-twist → F3")
         print("\n=== USAGE ===")
-        print("• Browse with mouse gestures")
-        print("• F1 (twist) = Enter typing mode")
-        print("• Use keyboard gestures to type")
-        print("• F1 again = Back to mouse")
-        print("\nPress any key to start...")
+        print("F1 → typing mode, use gestures, F1 → mouse mode")
+        print("\nPress Enter to start...")
         input()
         
         print(f"\nCurrent mode: {'KEYBOARD TYPING' if self.typing_mode else 'MOUSE'}")
