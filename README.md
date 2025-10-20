@@ -1,79 +1,78 @@
-# 🎯 Mudra Keyboard Mode Typing
+# 🎯 Mudra Complete System
 
-**Using your actual keyboard mode gestures - efficient and clean!**
-
-## 🎮 Your Available Gestures
-
-**In Keyboard Mode:**
-- **PINCH + RIGHT** → Right Arrow
-- **PINCH + LEFT** → Left Arrow  
-- **PINCH + UP** → Up Arrow
-- **PINCH + DOWN** → Down Arrow
-- **DOUBLE TAP** → Enter
-- **TWIST** → F2 (assign this)
-- **DOUBLE TWIST** → F3 (assign this)
+**All 26 letters + numbers + symbols + Training GUI!**
 
 ## 🚀 Quick Setup
 
-**1. Assign these keys in Mudra app:**
+**1. Switch to Mudra keyboard mode** (double-press button)
 
-**Mouse Mode:**
-- Twist → **F1**
-
-**Keyboard Mode:**
+**2. Assign in Mudra app:**
 - Twist → **F2**
 - Double-twist → **F3**
 
-**2. Run:**
+**3. Run training:**
 ```bash
 python3 mudra.py
 ```
 
-## 🎯 Typing System
+## 🎯 Complete Coverage
 
-**Single gestures (most common letters):**
-- **PINCH+RIGHT** → 'e' (12.7%)
-- **PINCH+LEFT** → 't' (9.1%)
-- **PINCH+UP** → 'a' (8.2%)
-- **PINCH+DOWN** → 'o' (7.5%)
-- **DOUBLE TAP** → 'i' (7.0%)
+**✅ All 26 letters**
+**✅ Numbers 0-9** 
+**✅ Common symbols**
+**✅ Space, backspace, enter**
 
-**Twist combinations:**
-- **TWIST+RIGHT** → 'n'
-- **TWIST+LEFT** → 's'
-- **TWIST+UP** → 'h'
-- **TWIST+DOWN** → 'r'
-- **TWIST alone** → space
+## 🎮 Gesture System
 
-**Double twist combinations:**
-- **DOUBLE TWIST+RIGHT** → 'l'
-- **DOUBLE TWIST+LEFT** → 'c'
-- **DOUBLE TWIST+UP** → 'u'
-- **DOUBLE TWIST+DOWN** → 'm'
-- **DOUBLE TWIST alone** → backspace
+**Single gestures (most common):**
+- RIGHT → 'e', LEFT → 't', UP → 'a', DOWN → 'o', ENTER → 'i'
+
+**F2 combinations:**
+- F2+RIGHT → 'n', F2+LEFT → 's', F2+UP → 'h', F2+DOWN → 'r'
+- F2 alone → space
+
+**F3 combinations:**
+- F3+RIGHT → 'l', F3+LEFT → 'c', F3+UP → 'u', F3+DOWN → 'm'
+- F3 alone → backspace
+
+**Double combinations (remaining letters):**
+- F2→F3+directions → f,g,y,p,b
+- F3→F2+directions → v,k,j,x,q
+- F2+RIGHT+LEFT → z
+
+**Numbers:**
+- F2→F3 = number mode, then directions → 1,2,3,4,5,6,7,8,9,0
+
+**Symbols:**
+- F3→F2 = symbol mode, then directions → .,!,?,;
+
+## 🎓 Training GUI Features
+
+**Interactive training:**
+- Practice words with visual feedback
+- Shows exact gestures needed for each letter
+- Progress tracking
+- Complete gesture reference chart
+
+**Learning path:**
+1. Start with common words
+2. See gesture combinations needed
+3. Practice typing with real-time feedback
+4. Build muscle memory
+
+## 📝 Examples
+
+**"the"** = LEFT + (F2+UP) + RIGHT (t-h-e)
+**"and"** = UP + (F2+RIGHT) + (F2+ENTER) (a-n-d)
+**"123"** = (F2→F3) + RIGHT + LEFT + UP
 
 ## ⚡ Why This Works
 
-**Efficient:** Single gestures for 65% of text
-**Natural:** Uses your actual hardware gestures
-**Fast:** No complex recognition needed
-**Reliable:** Direct keyboard input mapping
-
-## 🎯 Workflow
-
-1. **Browse** with mouse gestures (pinch, scroll, etc.)
-2. **F1 (twist)** → enter keyboard typing mode
-3. **Use keyboard gestures** → type letters
-4. **F1 again** → back to mouse mode
-
-**Example:** "the" = **PINCH+LEFT** **TWIST+UP** **PINCH+RIGHT** (t-h-e)
-
-## 📈 Coverage
-
-**Single gestures:** 65% of all text
-**With combinations:** 90%+ coverage
-**Learning time:** 30 minutes to basic proficiency
+**Frequency-based:** Most common letters = single gestures
+**Logical combinations:** Related gestures for letter groups
+**Complete coverage:** Every character you need
+**Visual training:** GUI shows exactly what to do
 
 ---
 
-**Clean, efficient typing using your actual Mudra keyboard gestures!**
+**Complete typing system with interactive training - master all letters!**

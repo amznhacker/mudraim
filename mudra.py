@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
-Mudra Keyboard Mode Typing - Using actual keyboard gestures
+Mudra Complete Keyboard - All 26 letters, numbers, symbols + Training GUI
 """
 
 import subprocess
 import sys
 import time
+import tkinter as tk
+from tkinter import ttk
+import random
 from pynput import keyboard
 from pynput.keyboard import Key, Listener as KeyboardListener
 
@@ -15,176 +18,329 @@ try:
 except ImportError:
     subprocess.check_call([sys.executable, "-m", "pip", "install", "pynput"])
 
-class MudraKeyboardTyping:
+class MudraCompleteSystem:
     def __init__(self):
         self.kb = keyboard.Controller()
-        self.typing_mode = False
         
-        # Single gestures - most common letters (covers 65% of text)
-        self.single_gestures = {
-            Key.right: 'e',        # PINCH + RIGHT → 'e' (12.7%)
-            Key.left: 't',         # PINCH + LEFT → 't' (9.1%)
-            Key.up: 'a',           # PINCH + UP → 'a' (8.2%)
-            Key.down: 'o',         # PINCH + DOWN → 'o' (7.5%)
-            Key.enter: 'i',        # DOUBLE TAP → 'i' (7.0%)
-        }
-        
-        # Assign twist and double twist
-        self.twist_key = Key.f2      # Will assign TWIST → F2
-        self.double_twist_key = Key.f3  # Will assign DOUBLE TWIST → F3
-        
-        # More letters using twist combinations
-        self.twist_gestures = {
-            (self.twist_key, Key.right): 'n',   # TWIST + RIGHT → 'n' (6.7%)
-            (self.twist_key, Key.left): 's',    # TWIST + LEFT → 's' (6.3%)
-            (self.twist_key, Key.up): 'h',      # TWIST + UP → 'h' (6.1%)
-            (self.twist_key, Key.down): 'r',    # TWIST + DOWN → 'r' (6.0%)
-            (self.twist_key, Key.enter): 'd',   # TWIST + DOUBLE TAP → 'd' (4.3%)
-        }
-        
-        # Double twist for more letters
-        self.double_twist_gestures = {
-            (self.double_twist_key, Key.right): 'l',  # DOUBLE TWIST + RIGHT → 'l' (4.0%)
-            (self.double_twist_key, Key.left): 'c',   # DOUBLE TWIST + LEFT → 'c' (2.8%)
-            (self.double_twist_key, Key.up): 'u',     # DOUBLE TWIST + UP → 'u' (2.8%)
-            (self.double_twist_key, Key.down): 'm',   # DOUBLE TWIST + DOWN → 'm' (2.4%)
-            (self.double_twist_key, Key.enter): 'w',  # DOUBLE TWIST + DOUBLE TAP → 'w' (2.4%)
+        # Complete gesture mapping
+        self.gestures = {
+            # Single gestures (5 most common letters)
+            Key.right: 'e',
+            Key.left: 't', 
+            Key.up: 'a',
+            Key.down: 'o',
+            Key.enter: 'i',
+            
+            # F2 combinations (twist + direction)
+            ('f2', Key.right): 'n',
+            ('f2', Key.left): 's',
+            ('f2', Key.up): 'h', 
+            ('f2', Key.down): 'r',
+            ('f2', Key.enter): 'd',
+            
+            # F3 combinations (double twist + direction)
+            ('f3', Key.right): 'l',
+            ('f3', Key.left): 'c',
+            ('f3', Key.up): 'u',
+            ('f3', Key.down): 'm',
+            ('f3', Key.enter): 'w',
+            
+            # Double combinations (remaining letters)
+            ('f2', 'f3', Key.right): 'f',
+            ('f2', 'f3', Key.left): 'g',
+            ('f2', 'f3', Key.up): 'y',
+            ('f2', 'f3', Key.down): 'p',
+            ('f2', 'f3', Key.enter): 'b',
+            ('f3', 'f2', Key.right): 'v',
+            ('f3', 'f2', Key.left): 'k',
+            ('f3', 'f2', Key.up): 'j',
+            ('f3', 'f2', Key.down): 'x',
+            ('f3', 'f2', Key.enter): 'q',
+            ('f2', Key.right, Key.left): 'z',
+            
+            # Numbers (F2 then F3 + direction)
+            ('f2', 'f3'): 'NUMBER_MODE',
+            ('number', Key.right): '1',
+            ('number', Key.left): '2',
+            ('number', Key.up): '3',
+            ('number', Key.down): '4',
+            ('number', Key.enter): '5',
+            ('number', Key.right, Key.up): '6',
+            ('number', Key.right, Key.down): '7',
+            ('number', Key.left, Key.up): '8',
+            ('number', Key.left, Key.down): '9',
+            ('number', Key.up, Key.down): '0',
+            
+            # Symbols (F3 then F2 + direction)
+            ('f3', 'f2'): 'SYMBOL_MODE',
+            ('symbol', Key.right): '.',
+            ('symbol', Key.left): ',',
+            ('symbol', Key.up): '!',
+            ('symbol', Key.down): '?',
+            ('symbol', Key.enter): ';',
         }
         
         # Special functions
-        self.space_key = self.twist_key  # TWIST alone → space
-        self.backspace_key = self.double_twist_key  # DOUBLE TWIST alone → backspace
+        self.special_functions = {
+            Key.f2: ' ',  # Space
+            Key.f3: 'BACKSPACE',
+        }
         
-        # Combo tracking
-        self.last_key = None
-        self.last_key_time = 0
-        self.combo_timeout = 0.5  # 500ms for combinations
+        # Gesture sequence tracking
+        self.current_sequence = []
+        self.sequence_start_time = 0
+        self.sequence_timeout = 1.0
+        self.mode = 'normal'  # normal, number, symbol
+        
+        # Training data
+        self.training_words = [
+            'the', 'and', 'you', 'that', 'was', 'for', 'are', 'with', 'his', 'they',
+            'at', 'be', 'this', 'have', 'from', 'or', 'one', 'had', 'by', 'word'
+        ]
+        
+        self.create_gui()
     
-    def process_key(self, key):
-        """Process keyboard gesture"""
-        current_time = time.time()
+    def create_gui(self):
+        """Create training GUI"""
+        self.root = tk.Tk()
+        self.root.title("Mudra Complete Training")
+        self.root.geometry("800x600")
         
-        # Check for combinations with twist/double twist
-        if self.last_key and current_time - self.last_key_time < self.combo_timeout:
-            combo = (self.last_key, key)
+        # Main frame
+        main_frame = ttk.Frame(self.root, padding="10")
+        main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+        
+        # Title
+        title = ttk.Label(main_frame, text="🎯 Mudra Complete Training", font=('Arial', 16, 'bold'))
+        title.grid(row=0, column=0, columnspan=2, pady=10)
+        
+        # Training section
+        training_frame = ttk.LabelFrame(main_frame, text="Training", padding="10")
+        training_frame.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=10)
+        
+        # Current word to practice
+        self.word_label = ttk.Label(training_frame, text="Practice word:", font=('Arial', 12))
+        self.word_label.grid(row=0, column=0, sticky=tk.W)
+        
+        self.current_word = tk.StringVar(value="the")
+        self.word_display = ttk.Label(training_frame, textvariable=self.current_word, 
+                                     font=('Arial', 20, 'bold'), foreground='blue')
+        self.word_display.grid(row=1, column=0, pady=10)
+        
+        # Progress
+        self.progress_label = ttk.Label(training_frame, text="Progress: 0/3", font=('Arial', 10))
+        self.progress_label.grid(row=2, column=0, sticky=tk.W)
+        
+        # Typed text
+        self.typed_text = tk.StringVar()
+        self.typed_display = ttk.Label(training_frame, textvariable=self.typed_text,
+                                      font=('Arial', 16), foreground='green')
+        self.typed_display.grid(row=3, column=0, pady=5)
+        
+        # Buttons
+        button_frame = ttk.Frame(training_frame)
+        button_frame.grid(row=4, column=0, pady=10)
+        
+        ttk.Button(button_frame, text="New Word", command=self.new_word).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="Clear", command=self.clear_typed).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="Show Gestures", command=self.show_gestures).pack(side=tk.LEFT, padx=5)
+        
+        # Gesture reference
+        ref_frame = ttk.LabelFrame(main_frame, text="Gesture Reference", padding="10")
+        ref_frame.grid(row=2, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=10)
+        
+        # Create scrollable text for gestures
+        self.gesture_text = tk.Text(ref_frame, height=15, width=80, font=('Courier', 9))
+        scrollbar = ttk.Scrollbar(ref_frame, orient=tk.VERTICAL, command=self.gesture_text.yview)
+        self.gesture_text.configure(yscrollcommand=scrollbar.set)
+        
+        self.gesture_text.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+        scrollbar.grid(row=0, column=1, sticky=(tk.N, tk.S))
+        
+        self.populate_gesture_reference()
+        
+        # Status
+        self.status_label = ttk.Label(main_frame, text="Ready to train! Use your Mudra gestures.", 
+                                     font=('Arial', 10))
+        self.status_label.grid(row=3, column=0, columnspan=2, pady=10)
+        
+        # Start keyboard listener
+        self.keyboard_listener = KeyboardListener(on_press=self.on_key_press)
+        self.keyboard_listener.start()
+        
+        self.new_word()
+    
+    def populate_gesture_reference(self):
+        """Fill gesture reference"""
+        ref_text = """COMPLETE GESTURE MAPPING
+
+SINGLE GESTURES (Most Common):
+RIGHT → e    LEFT → t    UP → a    DOWN → o    ENTER → i
+
+SPECIAL FUNCTIONS:
+F2 alone → SPACE    F3 alone → BACKSPACE
+
+TWIST COMBINATIONS (F2 + direction):
+F2+RIGHT → n    F2+LEFT → s    F2+UP → h    F2+DOWN → r    F2+ENTER → d
+
+DOUBLE TWIST COMBINATIONS (F3 + direction):
+F3+RIGHT → l    F3+LEFT → c    F3+UP → u    F3+DOWN → m    F3+ENTER → w
+
+REMAINING LETTERS (F2+F3 combinations):
+F2→F3+RIGHT → f    F2→F3+LEFT → g    F2→F3+UP → y    F2→F3+DOWN → p    F2→F3+ENTER → b
+F3→F2+RIGHT → v    F3→F2+LEFT → k    F3→F2+UP → j    F3→F2+DOWN → x    F3→F2+ENTER → q
+F2+RIGHT+LEFT → z
+
+NUMBERS (F2→F3 then direction):
+F2→F3 = Number Mode, then:
+RIGHT → 1    LEFT → 2    UP → 3    DOWN → 4    ENTER → 5
+RIGHT+UP → 6    RIGHT+DOWN → 7    LEFT+UP → 8    LEFT+DOWN → 9    UP+DOWN → 0
+
+SYMBOLS (F3→F2 then direction):
+F3→F2 = Symbol Mode, then:
+RIGHT → .    LEFT → ,    UP → !    DOWN → ?    ENTER → ;
+
+EXAMPLES:
+"the" = t+h+e = LEFT + (F2+UP) + RIGHT
+"and" = a+n+d = UP + (F2+RIGHT) + (F2+ENTER)
+"""
+        self.gesture_text.insert(tk.END, ref_text)
+        self.gesture_text.config(state=tk.DISABLED)
+    
+    def new_word(self):
+        """Get new training word"""
+        word = random.choice(self.training_words)
+        self.current_word.set(word)
+        self.clear_typed()
+        self.show_word_gestures(word)
+    
+    def clear_typed(self):
+        """Clear typed text"""
+        self.typed_text.set("")
+    
+    def show_gestures(self):
+        """Show gestures for current word"""
+        word = self.current_word.get()
+        self.show_word_gestures(word)
+    
+    def show_word_gestures(self, word):
+        """Show how to type a word"""
+        gestures = []
+        for char in word.lower():
+            gesture = self.get_gesture_for_char(char)
+            if gesture:
+                gestures.append(f"'{char}' = {gesture}")
+        
+        gesture_str = " → ".join(gestures)
+        self.status_label.config(text=f"Gestures: {gesture_str}")
+    
+    def get_gesture_for_char(self, char):
+        """Get gesture sequence for character"""
+        # Reverse lookup in gestures dict
+        for key, value in self.gestures.items():
+            if value == char:
+                if isinstance(key, tuple):
+                    return "+".join(str(k).replace('Key.', '') for k in key)
+                else:
+                    return str(key).replace('Key.', '')
+        return "?"
+    
+    def process_gesture_sequence(self, sequence):
+        """Process completed gesture sequence"""
+        # Convert sequence to tuple for lookup
+        seq_tuple = tuple(sequence)
+        
+        if seq_tuple in self.gestures:
+            result = self.gestures[seq_tuple]
             
-            # Check twist combinations
-            if combo in self.twist_gestures:
-                letter = self.twist_gestures[combo]
-                self.type_letter(letter)
-                print(f"✓ TWIST+{key.name} → '{letter}'")
-                self.last_key = None
+            if result == 'NUMBER_MODE':
+                self.mode = 'number'
+                self.status_label.config(text="Number mode active - use directions for numbers")
                 return
-            
-            # Check double twist combinations
-            if combo in self.double_twist_gestures:
-                letter = self.double_twist_gestures[combo]
-                self.type_letter(letter)
-                print(f"✓ DOUBLE TWIST+{key.name} → '{letter}'")
-                self.last_key = None
+            elif result == 'SYMBOL_MODE':
+                self.mode = 'symbol'
+                self.status_label.config(text="Symbol mode active - use directions for symbols")
                 return
-        
-        # Single gestures
-        if key in self.single_gestures:
-            letter = self.single_gestures[key]
-            self.type_letter(letter)
-            print(f"✓ {key.name} → '{letter}'")
-        
-        # Special keys
-        elif key == self.space_key:
-            # Check if it's part of a combo or standalone
-            if self.last_key and current_time - self.last_key_time < self.combo_timeout:
-                # It's part of a combo, wait for next key
-                pass
             else:
-                # Standalone twist = space
-                self.kb.press(Key.space)
-                self.kb.release(Key.space)
-                print("✓ TWIST → space")
-        
-        elif key == self.backspace_key:
-            # Check if it's part of a combo or standalone
-            if self.last_key and current_time - self.last_key_time < self.combo_timeout:
-                # It's part of a combo, wait for next key
-                pass
-            else:
-                # Standalone double twist = backspace
-                self.kb.press(Key.backspace)
-                self.kb.release(Key.backspace)
-                print("✓ DOUBLE TWIST → backspace")
-        
+                self.type_character(result)
+                self.mode = 'normal'
         else:
-            print(f"? Unknown key: {key}")
-        
-        self.last_key = key
-        self.last_key_time = current_time
+            self.status_label.config(text=f"Unknown gesture: {sequence}")
     
-    def type_letter(self, letter):
-        """Type a letter"""
-        self.kb.press(letter)
-        self.kb.release(letter)
+    def type_character(self, char):
+        """Type character and update display"""
+        if char == 'BACKSPACE':
+            current = self.typed_text.get()
+            if current:
+                self.typed_text.set(current[:-1])
+        else:
+            current = self.typed_text.get()
+            self.typed_text.set(current + char)
+        
+        # Check if word is complete
+        if self.typed_text.get().lower() == self.current_word.get().lower():
+            self.status_label.config(text="✓ Word complete! Great job!")
+            self.root.after(2000, self.new_word)
     
     def on_key_press(self, key):
-        """Handle all key presses"""
-        # F1 = Toggle typing mode (assign TWIST in mouse mode to F1)
-        if key == Key.f1:
-            self.typing_mode = not self.typing_mode
-            mode = "KEYBOARD TYPING" if self.typing_mode else "MOUSE"
-            print(f"\n🎯 {mode} MODE")
-            if self.typing_mode:
-                self.show_help()
-            return
+        """Handle key presses"""
+        current_time = time.time()
         
-        # Only process gestures in typing mode
-        if not self.typing_mode:
-            return
+        # Reset sequence if timeout
+        if current_time - self.sequence_start_time > self.sequence_timeout:
+            self.current_sequence = []
         
-        # ESC = Exit typing mode
-        if key == Key.esc:
-            self.typing_mode = False
-            print("\n🖱️ MOUSE MODE")
-            return
+        # Handle special functions first
+        if key in self.special_functions:
+            if len(self.current_sequence) == 0:  # Only if not part of sequence
+                func = self.special_functions[key]
+                if func == ' ':
+                    self.type_character(' ')
+                elif func == 'BACKSPACE':
+                    self.type_character('BACKSPACE')
+                return
         
-        # Process keyboard gestures
-        self.process_key(key)
+        # Add to sequence
+        self.current_sequence.append(key)
+        self.sequence_start_time = current_time
+        
+        # Check for matches
+        # First check single gestures
+        if len(self.current_sequence) == 1 and key in self.gestures:
+            # Wait a bit to see if it's part of a combo
+            self.root.after(200, lambda: self.check_single_gesture(key, current_time))
+        
+        # Check combinations
+        seq_tuple = tuple(self.current_sequence)
+        if seq_tuple in self.gestures:
+            self.process_gesture_sequence(self.current_sequence)
+            self.current_sequence = []
     
-    def show_help(self):
-        """Show gesture reference"""
-        print("=== KEYBOARD MODE GESTURES ===")
-        print("Single gestures:")
-        print("  PINCH+RIGHT → 'e'    PINCH+LEFT → 't'")
-        print("  PINCH+UP → 'a'       PINCH+DOWN → 'o'")
-        print("  DOUBLE TAP → 'i'")
-        print("\nTwist combinations:")
-        print("  TWIST+RIGHT → 'n'    TWIST+LEFT → 's'")
-        print("  TWIST+UP → 'h'       TWIST+DOWN → 'r'")
-        print("  TWIST alone → space")
-        print("\nDouble twist combinations:")
-        print("  DOUBLE TWIST+RIGHT → 'l'    DOUBLE TWIST+LEFT → 'c'")
-        print("  DOUBLE TWIST alone → backspace")
-        print("\nESC = mouse mode")
+    def check_single_gesture(self, key, press_time):
+        """Check if single gesture should be processed"""
+        if (len(self.current_sequence) == 1 and 
+            self.current_sequence[0] == key and
+            time.time() - press_time > 0.2):
+            
+            if key in self.gestures:
+                self.type_character(self.gestures[key])
+                self.current_sequence = []
     
     def run(self):
-        """Start the system"""
-        print("🎯 MUDRA KEYBOARD MODE TYPING")
-        print("Using your actual keyboard mode gestures!")
-        print("\n=== SETUP ===")
-        print("Mouse Mode: Twist → F1")
-        print("Keyboard Mode: Twist → F2, Double-twist → F3")
-        print("\n=== USAGE ===")
-        print("F1 → typing mode, use gestures, F1 → mouse mode")
-        print("\nPress Enter to start...")
-        input()
+        """Start the training system"""
+        print("🎯 MUDRA COMPLETE TRAINING")
+        print("Training GUI will open...")
+        print("Assign in Mudra keyboard mode:")
+        print("• Twist → F2")
+        print("• Double-twist → F3")
         
-        print(f"\nCurrent mode: {'KEYBOARD TYPING' if self.typing_mode else 'MOUSE'}")
-        print("Press Ctrl+C to exit")
-        
-        with KeyboardListener(on_press=self.on_key_press) as listener:
-            try:
-                listener.join()
-            except KeyboardInterrupt:
-                print("\nMudra keyboard typing stopped")
+        try:
+            self.root.mainloop()
+        except KeyboardInterrupt:
+            print("\nTraining stopped")
+        finally:
+            self.keyboard_listener.stop()
 
 if __name__ == "__main__":
-    system = MudraKeyboardTyping()
+    system = MudraCompleteSystem()
     system.run()
