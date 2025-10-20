@@ -1,6 +1,6 @@
-# 🎯 Mudra System-Wide Typing
+# 🎯 Mudra Typing - Beautiful UI
 
-**Type anywhere on Ubuntu with Mudra gestures!**
+**System-wide gesture typing with professional interface!**
 
 ## 🚀 Quick Start
 
@@ -13,58 +13,68 @@
 python3 mudra.py
 ```
 
-**3. Type anywhere!** Browser, terminal, any app.
+**3. Beautiful UI opens - type anywhere on Ubuntu!**
+
+## 🎨 UI Features
+
+**Professional Interface:**
+- Dark theme with modern colors
+- Real-time status display
+- Session statistics (characters typed, time)
+- Collapsible gesture reference
+- Always on top for easy monitoring
+
+**Visual Feedback:**
+- Status: "Ready" / "F2 + ?" / "F3 + ?"
+- Last typed character display
+- Character counter
+- Session timer
+
+**Controls:**
+- Reset Stats button
+- Show/Hide gesture reference
+- Exit button
 
 ## 🎮 Gestures
 
-**Single gestures (most common letters):**
-- RIGHT → e
-- LEFT → t  
-- UP → a
-- DOWN → o
-- ENTER → i
+**Single gestures:**
+- RIGHT → e, LEFT → t, UP → a, DOWN → o, ENTER → i
 
-**F2 combinations:**
-- F2+RIGHT → n
-- F2+LEFT → s
-- F2+UP → h
-- F2+DOWN → r
-- F2+ENTER → d
+**F2 combinations (Twist):**
+- F2+RIGHT → n, F2+LEFT → s, F2+UP → h, F2+DOWN → r, F2+ENTER → d
 - F2 alone → space
 
-**F3 combinations:**
-- F3+RIGHT → l
-- F3+LEFT → c
-- F3+UP → u
-- F3+DOWN → m
-- F3+ENTER → w
+**F3 combinations (Double-twist):**
+- F3+RIGHT → l, F3+LEFT → c, F3+UP → u, F3+DOWN → m, F3+ENTER → w
 - F3 alone → backspace
 
-## ⚡ How It Works
+## ⚡ System-Wide Typing
 
-**System-wide:** Python script captures Mudra gestures and types letters anywhere
-**Visual feedback:** Small window shows current status
-**Hardware debouncing:** Prevents Mudra spam
-**Always on top:** Status window stays visible
+**Works everywhere:**
+- Browser (Firefox, Chrome)
+- Terminal
+- Text editors (gedit, VS Code)
+- Any Ubuntu application
 
-## 📝 Examples
-
-**"the"** = LEFT + (F2+UP) + RIGHT (t-h-e)
-**"hello"** = (F2+UP) + RIGHT + (F3+RIGHT) + (F3+RIGHT) + DOWN (h-e-l-l-o)
+**Features:**
+- Hardware debouncing (prevents Mudra spam)
+- Combo timeout handling
+- Real-time visual feedback
+- Session statistics
 
 ## 🔧 Testing
 
-**Test in:**
-- Browser address bar
-- Terminal
-- Text editor
-- Any Ubuntu application
+**Try typing in:**
+1. Browser address bar
+2. Terminal commands
+3. Text documents
+4. Search boxes
 
-**Status window shows:**
-- "Ready" → waiting for gesture
-- "F2+?" → twist pressed, waiting for direction
-- "→ H" → letter typed
+**Watch the UI:**
+- Status changes as you gesture
+- Characters appear in "Last Typed"
+- Stats update in real-time
 
 ---
 
-**Complete gesture typing system that works everywhere on Ubuntu!**
+**Beautiful, professional gesture typing that works everywhere!**
