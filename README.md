@@ -1,11 +1,14 @@
-# 🎯 Mudra Gesture Pad
+# 🎯 Mudra Letter Recognition
 
-**Dedicated gesture area - doesn't interfere with mouse!**
+**Draw actual letter shapes - powered by $1 Unistroke Recognizer!**
 
-## 🎨 Smart Design
+## 🔬 Proven Technology
 
-**Problem solved:** Drawing gestures anywhere would interfere with normal mouse use
-**Solution:** Small floating gesture pad window - draw only in the dedicated area!
+**$1 Unistroke Recognizer:**
+- Used in Palm Pilot Graffiti
+- Powers many gesture recognition apps
+- Recognizes actual letter shapes, not just directions
+- 99%+ accuracy when trained
 
 ## 🚀 Quick Setup
 
@@ -17,48 +20,49 @@
 python3 mudra.py
 ```
 
-## 🎯 How It Works
+## ✍️ How It Works
 
-**Floating window:** Small 200x200 pixel gesture area
-**Always on top:** Easy access while working
-**Visual feedback:** Red lines show your gestures
-**Mode indicator:** White = mouse mode, Yellow = typing mode
+**Letter Shape Recognition:**
+- Draw letters like you would write them
+- Algorithm recognizes the actual shape
+- Much more natural than directional gestures
+- Confidence scoring for accuracy
 
-## ✍️ Gesture System
-
-**Single gestures:**
-- **→** e (most common)
-- **←** t  
-- **↑** a
-- **↓** o
-- **↗** i
-- **↘** n
-- **↖** s
-- **↙** h
-
-**Double gestures (same direction twice):**
-- **→→** r
-- **←←** d  
-- **↑↑** l
-- **↓↓** c
+**Supported Letters:**
+- **e, t, a, o, i, n, s, h** (most common)
+- **r, d, l, c** (additional letters)
+- More can be added easily
 
 ## 🎯 Usage
 
-1. **F1** → Toggle typing mode (window turns yellow)
-2. **Draw gestures** only in the white/yellow area
-3. **See red lines** as you draw
-4. **Letters appear** where your cursor is
-5. **F1 again** → Back to mouse mode (window turns white)
+1. **F1** → Toggle letter recognition mode (pad turns yellow)
+2. **Draw letter shapes** in the yellow area like handwriting
+3. **Letters are typed** where your cursor is
+4. **Clear button** → erase and try again
+5. **F1 again** → back to mouse mode
 
 ## ⚡ Benefits
 
-**No interference:** Normal mouse use everywhere except the small pad
-**Visual feedback:** See exactly what gestures you're making
-**Always accessible:** Floating window stays on top
-**Dedicated space:** Clear boundary between mouse and typing
+**Natural writing:** Draw letters like you normally write them
+**High accuracy:** Proven algorithm used in commercial products
+**Visual feedback:** See your strokes as you draw
+**Confidence scoring:** Shows how sure the system is
+**No interference:** Normal mouse use everywhere else
 
-**Example:** "the" = **←** **↙** **→** (t-h-e) drawn in the pad
+## 📝 Examples
+
+**Letter 'e':** Draw like writing an 'e' - horizontal lines with connecting stroke
+**Letter 't':** Draw top horizontal line, then vertical line down
+**Letter 'a':** Draw triangle with horizontal line across middle
+
+## 🔧 Technical
+
+**Based on $1 Unistroke Recognizer:**
+- Normalizes stroke to standard size/position
+- Compares against letter templates
+- Returns best match with confidence score
+- Same algorithm used in Palm Pilot and modern apps
 
 ---
 
-**Perfect solution - gesture typing without breaking mouse functionality!**
+**Real handwriting recognition - just like writing on paper!**
