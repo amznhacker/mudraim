@@ -1,13 +1,16 @@
-# 🎯 Mudra 8-Direction Typing
+# 🎯 Mudra Improved Typing
 
-**Based on proven gesture keyboard research - 40+ WPM achievable!**
+**Fixed horizontal detection and simplified double gestures!**
 
-## 🔬 Research-Based Design
+## 🔧 Key Improvements
 
-**Inspired by successful products:**
-- **8pen keyboard** - 8-direction wheel system
-- **Graffiti (Palm Pilot)** - Single-stroke letters
-- **Swype** - Gesture typing pioneer
+**Better horizontal detection:**
+- More forgiving left/right gesture recognition
+- Reduced sensitivity threshold for easier gestures
+
+**Simplified double gestures:**
+- Same direction twice quickly = different letter
+- No complex combinations to remember
 
 ## 🚀 Quick Setup
 
@@ -19,48 +22,47 @@
 python3 mudra.py
 ```
 
-## 🎯 8-Direction System
+## 🎯 Gesture System
 
-**Single gestures = Most common letters (65% of text):**
-- **→** e (12.7%)
-- **←** t (9.1%)  
-- **↑** a (8.2%)
-- **↓** o (7.5%)
-- **↗** i (7.0%)
-- **↘** n (6.7%)
-- **↖** s (6.3%)
-- **↙** h (6.1%)
+**Single gestures:**
+- **→** e (most common)
+- **←** t  
+- **↑** a
+- **↓** o
+- **↗** i
+- **↘** n
+- **↖** s
+- **↙** h
 
-**Double gestures = Remaining letters:**
-- **→↑** r
-- **→↓** d  
-- **→←** l
-- **←↑** c
-- **←↓** u
+**Double gestures (same direction twice):**
+- **→→** r
+- **←←** d  
+- **↑↑** l
+- **↓↓** c
 
-## ⚡ Why This Works
+## ⚡ What's Fixed
 
-**Proven speed:** 40+ WPM with practice
-**Easy learning:** Only 8 directions to master
-**Frequency-based:** Most common letters = single gestures
-**Motor memory:** Consistent directional patterns
+**Horizontal gestures:** Now much easier to detect
+**Double gestures:** Simply repeat the same direction quickly
+**Debug output:** See exactly what gestures are detected
+**Forgiving recognition:** Less precise gestures still work
 
 ## 🎯 Usage
 
 1. **F1** → typing mode
-2. **Drag** in 8 directions for letters
-3. **Quick double drags** for rare letters
+2. **Drag clearly** in 8 directions
+3. **Double gestures:** same direction twice quickly
 4. **Right click** → space
 
 **Example:** "the" = **←** **↙** **→** (t-h-e)
 
-## 📈 Learning Path
+## 📈 Tips
 
-**Day 1:** Learn 8 directions for common letters
-**Week 1:** 15-20 WPM with single gestures
-**Month 1:** 30+ WPM with double gestures
-**Month 3:** 40+ WPM fluent typing
+- Make **clear, deliberate** gestures
+- **Horizontal** gestures are now easier
+- **Double gestures:** quick repeat in same direction
+- Watch the **debug output** to learn patterns
 
 ---
 
-**Proven system used by millions - now for gesture bands!**
+**Reliable gesture typing with improved detection!**
