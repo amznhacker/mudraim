@@ -1,78 +1,70 @@
-# 🎯 Mudra Complete System
+# 🎯 Mudra System-Wide Typing
 
-**All 26 letters + numbers + symbols + Training GUI!**
+**Type anywhere on Ubuntu with Mudra gestures!**
 
-## 🚀 Quick Setup
+## 🚀 Quick Start
 
-**1. Switch to Mudra keyboard mode** (double-press button)
+**1. Setup Mudra keyboard mode:**
+- Double-press Mudra button → keyboard mode
+- Assign: Twist → F2, Double-twist → F3
 
-**2. Assign in Mudra app:**
-- Twist → **F2**
-- Double-twist → **F3**
-
-**3. Run training:**
+**2. Run:**
 ```bash
 python3 mudra.py
 ```
 
-## 🎯 Complete Coverage
+**3. Type anywhere!** Browser, terminal, any app.
 
-**✅ All 26 letters**
-**✅ Numbers 0-9** 
-**✅ Common symbols**
-**✅ Space, backspace, enter**
+## 🎮 Gestures
 
-## 🎮 Gesture System
-
-**Single gestures (most common):**
-- RIGHT → 'e', LEFT → 't', UP → 'a', DOWN → 'o', ENTER → 'i'
+**Single gestures (most common letters):**
+- RIGHT → e
+- LEFT → t  
+- UP → a
+- DOWN → o
+- ENTER → i
 
 **F2 combinations:**
-- F2+RIGHT → 'n', F2+LEFT → 's', F2+UP → 'h', F2+DOWN → 'r'
+- F2+RIGHT → n
+- F2+LEFT → s
+- F2+UP → h
+- F2+DOWN → r
+- F2+ENTER → d
 - F2 alone → space
 
 **F3 combinations:**
-- F3+RIGHT → 'l', F3+LEFT → 'c', F3+UP → 'u', F3+DOWN → 'm'
+- F3+RIGHT → l
+- F3+LEFT → c
+- F3+UP → u
+- F3+DOWN → m
+- F3+ENTER → w
 - F3 alone → backspace
 
-**Double combinations (remaining letters):**
-- F2→F3+directions → f,g,y,p,b
-- F3→F2+directions → v,k,j,x,q
-- F2+RIGHT+LEFT → z
+## ⚡ How It Works
 
-**Numbers:**
-- F2→F3 = number mode, then directions → 1,2,3,4,5,6,7,8,9,0
-
-**Symbols:**
-- F3→F2 = symbol mode, then directions → .,!,?,;
-
-## 🎓 Training GUI Features
-
-**Interactive training:**
-- Practice words with visual feedback
-- Shows exact gestures needed for each letter
-- Progress tracking
-- Complete gesture reference chart
-
-**Learning path:**
-1. Start with common words
-2. See gesture combinations needed
-3. Practice typing with real-time feedback
-4. Build muscle memory
+**System-wide:** Python script captures Mudra gestures and types letters anywhere
+**Visual feedback:** Small window shows current status
+**Hardware debouncing:** Prevents Mudra spam
+**Always on top:** Status window stays visible
 
 ## 📝 Examples
 
 **"the"** = LEFT + (F2+UP) + RIGHT (t-h-e)
-**"and"** = UP + (F2+RIGHT) + (F2+ENTER) (a-n-d)
-**"123"** = (F2→F3) + RIGHT + LEFT + UP
+**"hello"** = (F2+UP) + RIGHT + (F3+RIGHT) + (F3+RIGHT) + DOWN (h-e-l-l-o)
 
-## ⚡ Why This Works
+## 🔧 Testing
 
-**Frequency-based:** Most common letters = single gestures
-**Logical combinations:** Related gestures for letter groups
-**Complete coverage:** Every character you need
-**Visual training:** GUI shows exactly what to do
+**Test in:**
+- Browser address bar
+- Terminal
+- Text editor
+- Any Ubuntu application
+
+**Status window shows:**
+- "Ready" → waiting for gesture
+- "F2+?" → twist pressed, waiting for direction
+- "→ H" → letter typed
 
 ---
 
-**Complete typing system with interactive training - master all letters!**
+**Complete gesture typing system that works everywhere on Ubuntu!**
