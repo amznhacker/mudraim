@@ -1,6 +1,6 @@
-# 🎯 Mudra Air Typing
+# 🎯 Mudra Simple Air Typing
 
-**Draw letters in the air with mouse gestures!**
+**Click and drag to type letters!**
 
 ## 🚀 Quick Setup
 
@@ -16,47 +16,39 @@ python3 mudra.py
 
 **Mouse Mode:** Normal mouse gestures (pinch, scroll, etc.)
 
-**Air Typing Mode:** Draw letter shapes in the air with mouse movement!
+**Air Typing Mode:** Hold left click and drag in directions to type!
 
-### Simple Letter Patterns
-- **→** (right) → 'i'
-- **←** (left) → 'l'  
-- **↑** (up) → 't'
-- **↓** (down) → 'j'
+### Simple Directional Gestures
+- **→** (drag right) → 'e'
+- **←** (drag left) → 't'  
+- **↑** (drag up) → 'a'
+- **↓** (drag down) → 'o'
 
-### Common Letters
-- **→←** (back/forth) → 'e' (most common)
-- **↑↓** (up/down) → 'a'
-- **↓↑** (down/up) → 'o'
-- **←→** (left/right) → 's'
+### Diagonal Gestures
+- **↗** (drag up-right) → 'i'
+- **↘** (drag down-right) → 'n'
+- **↖** (drag up-left) → 's'
+- **↙** (drag down-left) → 'h'
 
-### Letter Shapes
-- **→↓** (L shape) → 'r'
-- **↑→** (reverse L) → 'p'
-- **→↓←** (C shape) → 'c'
-- **←↓→** (U shape) → 'u'
+## ⚡ How To Use
 
-## ⚡ Why This Is Better
-
-**Traditional typing:** Memorize complex chord combinations
-**Air typing:** Draw letters naturally like handwriting in the air
-
-**Result:** Intuitive and fast once you learn the patterns!
+1. **Hold left click** and drag in a direction
+2. **Release** to type the letter
+3. **Right click** for space
 
 ## 🎯 Workflow
 
 1. **Browse** with normal mouse gestures
 2. **F1 (twist)** → enter air typing mode  
-3. **Draw letters** in the air with mouse movement
-4. **Left click** → space between words
-5. **Right click** → finish current letter
-6. **F1 again** → back to mouse
+3. **Click and drag** → type letters
+4. **Right click** → space between words
+5. **F1 again** → back to mouse
 
 ## 🔧 Files
 
-- `mudra.py` - Air typing system (run this)
+- `mudra.py` - Simple air typing system (run this)
 - `gesture_debug.py` - Debug tool to test gestures
 
 ---
 
-**Type by drawing letters in the air - as natural as handwriting!**
+**Type with simple directional gestures - click, drag, release!**
