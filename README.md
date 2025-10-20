@@ -1,6 +1,14 @@
-# 🎯 Mudra Typing - Beautiful UI
+# 🎯 Mudra Learning System
 
-**System-wide gesture typing with professional interface!**
+**Self-calibrating gesture typing that learns from your feedback!**
+
+## 🧠 How It Works
+
+**Machine Learning Approach:**
+1. **Make a gesture** → System detects what it thinks you did
+2. **System predicts** → Shows what letter it thinks you want
+3. **You give feedback** → ✓ YES (correct) or ✗ NO (wrong)
+4. **System learns** → Gets better at recognizing your specific gestures
 
 ## 🚀 Quick Start
 
@@ -8,73 +16,75 @@
 - Double-press Mudra button → keyboard mode
 - Assign: Twist → F2, Double-twist → F3
 
-**2. Run:**
+**2. Run learning system:**
 ```bash
 python3 mudra.py
 ```
 
-**3. Beautiful UI opens - type anywhere on Ubuntu!**
+**3. Train it with your gestures!**
 
-## 🎨 UI Features
+## 🎓 Training Process
 
-**Professional Interface:**
-- Dark theme with modern colors
-- Real-time status display
-- Session statistics (characters typed, time)
-- Collapsible gesture reference
-- Always on top for easy monitoring
+**Learning Interface:**
+- **Detected:** Shows what gesture was detected
+- **Predicted letter:** Shows what the system thinks you want
+- **Feedback buttons:** ✓ YES or ✗ NO
+- **Correction:** If wrong, type the correct letter
 
-**Visual Feedback:**
-- Status: "Ready" / "F2 + ?" / "F3 + ?"
-- Last typed character display
-- Character counter
-- Session timer
+**Example Training Session:**
+1. You do RIGHT gesture
+2. System shows: "Detected: right, Predicted: e"
+3. If correct → click ✓ YES (confidence increases)
+4. If wrong → click ✗ NO, then type correct letter
+5. System learns your specific gesture patterns
 
-**Controls:**
-- Reset Stats button
-- Show/Hide gesture reference
-- Exit button
+## 🔧 Adaptive Features
 
-## 🎮 Gestures
+**Confidence System:**
+- Correct feedback → increases confidence
+- Wrong feedback → decreases confidence
+- System adapts to your gesture style
+
+**Pattern Storage:**
+- Saves learned patterns to `mudra_learning.json`
+- Remembers your corrections
+- Gets more accurate over time
+
+**Timing Calibration:**
+- Learns your gesture timing
+- Adapts to your Mudra band's sensitivity
+- Reduces false positives
+
+## 🎮 Supported Gestures
 
 **Single gestures:**
-- RIGHT → e, LEFT → t, UP → a, DOWN → o, ENTER → i
+- RIGHT, LEFT, UP, DOWN, ENTER
 
-**F2 combinations (Twist):**
-- F2+RIGHT → n, F2+LEFT → s, F2+UP → h, F2+DOWN → r, F2+ENTER → d
+**Combo gestures:**
+- F2 + direction (twist combinations)
+- F3 + direction (double-twist combinations)
+
+**Special functions:**
 - F2 alone → space
-
-**F3 combinations (Double-twist):**
-- F3+RIGHT → l, F3+LEFT → c, F3+UP → u, F3+DOWN → m, F3+ENTER → w
 - F3 alone → backspace
 
-## ⚡ System-Wide Typing
+## 📊 Learning Data
 
-**Works everywhere:**
-- Browser (Firefox, Chrome)
-- Terminal
-- Text editors (gedit, VS Code)
-- Any Ubuntu application
+**Automatically saves:**
+- Gesture patterns
+- Confidence scores
+- Timing data
+- Your corrections
 
-**Features:**
-- Hardware debouncing (prevents Mudra spam)
-- Combo timeout handling
-- Real-time visual feedback
-- Session statistics
+**Reset option:** Clear all learning data to start fresh
 
-## 🔧 Testing
+## ⚡ Benefits
 
-**Try typing in:**
-1. Browser address bar
-2. Terminal commands
-3. Text documents
-4. Search boxes
-
-**Watch the UI:**
-- Status changes as you gesture
-- Characters appear in "Last Typed"
-- Stats update in real-time
+**Personalized:** Learns YOUR specific gesture style
+**Adaptive:** Gets better with use
+**Correctable:** Fix mistakes and teach correct mappings
+**Persistent:** Remembers learning between sessions
 
 ---
 
-**Beautiful, professional gesture typing that works everywhere!**
+**The first gesture typing system that learns and adapts to YOU!**
