@@ -51,6 +51,11 @@ class MudraTypingGUI:
         self.combo_start_time = 0
         self.combo_timeout = 1.5  # Longer timeout
         
+        # Hardware debouncing for Mudra band spam
+        self.last_key = None
+        self.last_key_time = 0
+        self.debounce_delay = 0.3  # 300ms debounce
+        
         self.create_gui()
     
     def create_gui(self):
@@ -156,6 +161,13 @@ class MudraTypingGUI:
     def on_key_press(self, key):
         """Handle key presses"""
         current_time = time.time()
+        
+        # Hardware debouncing - ignore repeated keys from Mudra band
+        if key == self.last_key and current_time - self.last_key_time < self.debounce_delay:
+            return  # Ignore spam from hardware
+        
+        self.last_key = key
+        self.last_key_time = current_time
         
         # Handle combinations first
         if self.waiting_for:
