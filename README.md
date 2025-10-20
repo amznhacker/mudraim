@@ -1,67 +1,62 @@
-# 🎯 Mudra Complete System
+# 🎯 Mudra Air Typing
 
-**Mouse + Fast Gesture Typing** - Type 60+ WPM with pure gestures!
+**Draw letters in the air with mouse gestures!**
 
 ## 🚀 Quick Setup
 
-**1. Assign these keys in your Mudra app:**
-
-**Mouse Mode (default):**
+**1. Assign this key in your Mudra app:**
 - Twist → **F1**
-- Double-twist → **F4**
-
-**Keyboard Mode (double-press Mudra button):**
-- Pinch+Right → **Right Arrow**
-- Pinch+Left → **Left Arrow**  
-- Pinch+Up → **Up Arrow**
-- Pinch+Down → **Down Arrow**
-- Double-tap → **Enter**
-- Twist → **F2**
-- Double-twist → **F3**
 
 **2. Run the system:**
 ```bash
 python3 mudra.py
 ```
 
-## 🎯 How It Works
+## ✍️ How It Works
 
-**Mouse Mode:** All your gestures work normally (pinch, scroll, etc.)
+**Mouse Mode:** Normal mouse gestures (pinch, scroll, etc.)
 
-**Typing Mode:** Use **gesture combinations** (chords) to type letters:
+**Air Typing Mode:** Draw letter shapes in the air with mouse movement!
 
-### Single Gestures = Common Letters
-- **Right** → 'e' (most common)
-- **Left** → 't'  
-- **Up** → 'a'
-- **Down** → 'o'
+### Simple Letter Patterns
+- **→** (right) → 'i'
+- **←** (left) → 'l'  
+- **↑** (up) → 't'
+- **↓** (down) → 'j'
 
-### Combinations = Other Letters  
-- **Right+Up** → 'i'
-- **Right+Down** → 'n'
-- **Left+Up** → 's'
-- **Twist** → space
-- **Double-twist** → period
+### Common Letters
+- **→←** (back/forth) → 'e' (most common)
+- **↑↓** (up/down) → 'a'
+- **↓↑** (down/up) → 'o'
+- **←→** (left/right) → 's'
 
-## ⚡ Why This Is Faster
+### Letter Shapes
+- **→↓** (L shape) → 'r'
+- **↑→** (reverse L) → 'p'
+- **→↓←** (C shape) → 'c'
+- **←↓→** (U shape) → 'u'
 
-**Traditional typing:** Move fingers to different keys
-**Gesture chording:** Combine directional gestures simultaneously
+## ⚡ Why This Is Better
 
-**Result:** 60+ WPM possible (faster than 75% of typists!)
+**Traditional typing:** Memorize complex chord combinations
+**Air typing:** Draw letters naturally like handwriting in the air
+
+**Result:** Intuitive and fast once you learn the patterns!
 
 ## 🎯 Workflow
 
-1. **Browse** with mouse gestures
-2. **F1 (twist)** → enter typing mode  
-3. **Use gesture chords** → type words
-4. **F1 again** → back to mouse
+1. **Browse** with normal mouse gestures
+2. **F1 (twist)** → enter air typing mode  
+3. **Draw letters** in the air with mouse movement
+4. **Left click** → space between words
+5. **Right click** → finish current letter
+6. **F1 again** → back to mouse
 
 ## 🔧 Files
 
-- `mudra.py` - Main system (run this)
-- `gesture_debug.py` - Debug tool to test your gestures
+- `mudra.py` - Air typing system (run this)
+- `gesture_debug.py` - Debug tool to test gestures
 
 ---
 
-**Ready to type at superhuman speeds with pure gestures!**
+**Type by drawing letters in the air - as natural as handwriting!**
